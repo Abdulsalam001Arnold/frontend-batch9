@@ -1,4 +1,5 @@
 import Counter from "../components/Counter";
+import ControlledFormXray from "../components/controlled-form-xray";
 
  const About = () => {
     const year = new Date().getFullYear()
@@ -11,6 +12,8 @@ import Counter from "../components/Counter";
       </p>
 
       <Counter/>
+
+      <ControlledFormXray/>
         </>
     )
 }
