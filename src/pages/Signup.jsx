@@ -4,11 +4,12 @@ import { axiosInstace, getErrorMessage } from "../api/axios"
 import { ToastContainer, toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 
-export default function Login() {
+export default function Signup() {
     const navigate = useNavigate()
     const [user, setUser] = useState(null)
 
     const [formData, setFormData] = useState({
+        username: "",
         email: "",
         password: ""
     })
@@ -21,7 +22,7 @@ export default function Login() {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try{
-        const resposne = await axiosInstace.post("/login", formData)
+        const resposne = await axiosInstace.post("/signup", formData)
         console.log(resposne.data)
         setUser(resposne.data.data)
         toast.success(resposne.data.message)
@@ -33,7 +34,16 @@ export default function Login() {
     return(
 <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <ToastContainer/>
+    <h1>
+        {user ? user.username : "Guest"}
+    </h1>
   <form onSubmit={handleSubmit} action="" method="POST" className="w-full h-full flex flex-col items-center gap-6 p-4 border border-gray-300 rounded-md">
+
+    <div className="">
+        <label htmlFor="username">Username</label>
+        <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} className="w-full h-full border border-gray-300 rounded-md p-2" />
+    </div>
+
     <div className="">
         <label htmlFor="email">Email</label>
         <input type="email" id="email" name="email" value={formData.email} autoComplete="email" onChange={handleChange} className="w-full h-full border border-gray-300 rounded-md p-2" />
@@ -45,7 +55,7 @@ export default function Login() {
     </div>
 
     <button type="submit">
-        Login
+        Sign up
     </button>
   </form>
 </div>
