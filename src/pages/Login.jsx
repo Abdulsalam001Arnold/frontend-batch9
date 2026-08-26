@@ -1,12 +1,15 @@
 
 import { useState } from "react"
-import { axiosInstace, getErrorMessage } from "../api/axios"
 import { ToastContainer, toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import { useUserStore } from "../store/userStore"
+import { Loader } from "../components/Loader"
 
 export default function Login() {
     const navigate = useNavigate()
-    const [user, setUser] = useState(null)
+    const {login} = useUserStore()
+
+    const [loading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({
         email: "",
@@ -21,12 +24,14 @@ export default function Login() {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try{
-        const resposne = await axiosInstace.post("/login", formData)
-        console.log(resposne.data)
-        setUser(resposne.data.data)
-        toast.success(resposne.data.message)
+        setLoading(true)
+        const data = await login(formData)
+        toast.success(data.message)
+        navigate("/")
         }catch(err) {
-            toast.error(getErrorMessage(err))
+            toast.error(err.message)
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -44,9 +49,15 @@ export default function Login() {
         <input type="password" id="password" name="password" value={formData.password} autoComplete="current-password" onChange={handleChange} className="w-full h-full border border-gray-300 rounded-md p-2" />
     </div>
 
-    <button type="submit">
+
+    <div className="w-40">
+        {loading ? <Loader/> :
+    <button type="submit" className="bg-blue-500 text-white p-5 rounded-lg w-full">
         Login
     </button>
+        }
+    </div>
+
   </form>
 </div>
     )

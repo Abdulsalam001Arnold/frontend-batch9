@@ -1,10 +1,13 @@
 
 import { useState, useEffect } from "react";
 import {toast, ToastContainer} from "react-toastify"
+import { useUserStore } from "../store/userStore";
 
 
  const Home = () => {
     const year = new Date().getFullYear()
+
+    const {user} = useUserStore()
 
     const [characters, setCharacters] = useState([])
 
@@ -22,7 +25,7 @@ import {toast, ToastContainer} from "react-toastify"
     return(
         <>
         <ToastContainer position="top-left" autoClose={3000} theme="dark" closeOnClick={true} draggable={true} pauseOnHover={true} rtl={false} limit={1} hideProgressBar={false} newestOnTop={false} closeButton={true}/>
-        <h1 className="text-red-800 text-4xl text-center">Hello World</h1>
+        <h1 className="text-red-800 text-4xl text-center">{user ? user?.username : "Guest"}</h1>
 
       <p className="text-center">
         Copyright &copy; {year}

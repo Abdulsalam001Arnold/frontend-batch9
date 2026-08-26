@@ -1,12 +1,12 @@
 
 import { useState } from "react"
-import { axiosInstace, getErrorMessage } from "../api/axios"
 import { ToastContainer, toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import { useUserStore } from "../store/userStore"
 
 export default function Signup() {
     const navigate = useNavigate()
-    const [user, setUser] = useState(null)
+    const {signup} = useUserStore()
 
     const [formData, setFormData] = useState({
         username: "",
@@ -22,21 +22,17 @@ export default function Signup() {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try{
-        const resposne = await axiosInstace.post("/signup", formData)
-        console.log(resposne.data)
-        setUser(resposne.data.data)
-        toast.success(resposne.data.message)
+        const data = await signup(formData)
+        toast.success(data.message)
+        navigate("/")
         }catch(err) {
-            toast.error(getErrorMessage(err))
+            toast.error(err.message)
         }
     }
 
     return(
 <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <ToastContainer/>
-    <h1>
-        {user ? user.username : "Guest"}
-    </h1>
   <form onSubmit={handleSubmit} action="" method="POST" className="w-full h-full flex flex-col items-center gap-6 p-4 border border-gray-300 rounded-md">
 
     <div className="">
